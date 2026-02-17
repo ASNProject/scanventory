@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000011397879",
+    "project_id": "scanventory-c9ea2",
+    "storage_bucket": "scanventory-c9ea2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000011397879:android:fbed355f29d021cadef1f2",
+        "android_client_info": {
+          "package_name": "com.asnproject.scanventory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEKJ2MKZj6GBQ-_RsK8Wlo2AlttFMWp48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

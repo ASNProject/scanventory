@@ -1,4 +1,4 @@
-package com.example.scanventory
+package com.asnproject.scanventory
 
 import io.flutter.embedding.android.FlutterActivity
 
