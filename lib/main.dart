@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanventory/barcode_scanner/barcode_scanner.dart';
+import 'package:satset/barcode_scanner/barcode_scanner.dart';
 
 void main() {
   runApp(const MyApp());

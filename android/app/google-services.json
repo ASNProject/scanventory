@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1000011397879",
-    "project_id": "scanventory-c9ea2",
-    "storage_bucket": "scanventory-c9ea2.firebasestorage.app"
+    "project_number": "85388571577",
+    "project_id": "satset-38b60",
+    "storage_bucket": "satset-38b60.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1000011397879:android:fbed355f29d021cadef1f2",
+        "mobilesdk_app_id": "1:85388571577:android:c7a2e9add4b679e55c7c68",
         "android_client_info": {
-          "package_name": "com.asnproject.scanventory"
+          "package_name": "id.go.asn.satset"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAEKJ2MKZj6GBQ-_RsK8Wlo2AlttFMWp48"
+          "current_key": "AIzaSyDl6K4pLJQZR83H3CZtDgEwNwPRaGCXBvs"
         }
       ],
       "services": {

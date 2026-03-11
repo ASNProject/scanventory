@@ -16,7 +16,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
-import 'package:scanventory/widgets/widgets.dart';
+import 'package:satset/widgets/widgets.dart';
 
 class BarcodeScannerPage extends StatefulWidget {
   const BarcodeScannerPage({super.key});
@@ -32,15 +32,22 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
 
   bool isLoading = false;
   String? lastScannedBarcode;
+  bool isFetching = false;
 
   Future<void> fetchData(String barcode) async {
     setState(() => isLoading = true);
 
     final url = Uri.parse(
-      "https://script.google.com/macros/s/AKfycbz9MgpNYedjkBJt2BHPbCcUQoutAAzxqd0SCBy4BEnkH8H8fnEowvLT7sr9kpOhSo0D/exec?barcode=$barcode",
+      "https://script.google.com/macros/s/AKfycbz9MgpNYedjkBJt2BHPbCcUQoutAAzxqd0SCBy4BEnkH8H8fnEowvLT7sr9kpOhSo0D/exec?barcode=$barcode&t=${DateTime.now().millisecondsSinceEpoch}",
     );
 
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: {
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+      },
+    );
     final data = jsonDecode(response.body);
 
     setState(() {
@@ -76,9 +83,15 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
             onDetect: (capture) {
               final barcode = capture.barcodes.first.rawValue;
 
-              if (barcode != null && barcode != lastScannedBarcode) {
+              if (barcode != null && !isFetching) {
+                isFetching = true;
                 lastScannedBarcode = barcode;
-                fetchData(barcode);
+
+                fetchData(barcode).then((_) {
+                  Future.delayed(const Duration(seconds: 2), () {
+                    isFetching = false;
+                  });
+                });
               }
             },
           ),
@@ -125,42 +138,79 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 40,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
-                        borderRadius: BorderRadius.circular(10),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade400,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'SATSET',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Scan Sekali Aset Terkendali",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(
                       child: isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : items == null || items!.isEmpty
-                              ? const Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.info_outline_rounded,
-                                        color: Colors.grey,
-                                        size: 40,
+                              ? ListView(
+                                  controller: scrollController,
+                                  children: [
+                                    SizedBox(
+                                      height: 80,
+                                    ),
+                                    Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.info_outline_rounded,
+                                            color: Colors.grey,
+                                            size: 40,
+                                          ),
+                                          Text(
+                                            "Belum ada data",
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                          Text(
+                                            "Pastikan barcode sudah benar dan terdaftar di sistem",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        "Belum ada data",
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      Text(
-                                        "Pastikan barcode sudah benar dan terdaftar di sistem",
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 )
                               : ListView.builder(
                                   controller: scrollController,
